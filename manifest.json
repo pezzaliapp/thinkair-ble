@@ -1,11 +1,10 @@
 {
   "name": "ThinkAir BLE",
   "short_name": "ThinkAir",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1976d2",
-  "description": "Monitoraggio BLE in tempo reale da Nicla Sense ME",
+  "theme_color": "#007BFF",
   "icons": [
     {
       "src": "icon/thinkair-192.png",
