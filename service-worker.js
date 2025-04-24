@@ -1,0 +1,1 @@
+// Vuoto per attivare la PWA
