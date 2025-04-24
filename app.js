@@ -1,82 +1,65 @@
-let device, characteristic;
+let bleDevice;
+let dataCharacteristic;
 
-async function connect() {
+async function connectToDevice() {
   try {
-    document.getElementById("status").textContent = "🔄 Connessione...";
-    device = await navigator.bluetooth.requestDevice({
-      filters: [{ namePrefix: "ThinkAir" }],
-      optionalServices: ["battery_service", "device_information", "thinkair_service"]
+    document.getElementById('statusText').textContent = "⏳ Connessione in corso...";
+    bleDevice = await navigator.bluetooth.requestDevice({
+      filters: [{ name: "ThinkAir" }],
+      optionalServices: ["19b10000-e8f2-537e-4f6c-d104768a1214"]
     });
 
-    const server = await device.gatt.connect();
-    const service = await server.getPrimaryService("thinkair_service");
-    characteristic = await service.getCharacteristic("thinkair_characteristic");
+    const server = await bleDevice.gatt.connect();
+    const service = await server.getPrimaryService("19b10000-e8f2-537e-4f6c-d104768a1214");
+    dataCharacteristic = await service.getCharacteristic("19b10001-e8f2-537e-4f6c-d104768a1214");
 
-    document.getElementById("status").textContent = "✅ Connesso";
-    startReading();
+    dataCharacteristic.startNotifications();
+    dataCharacteristic.addEventListener("characteristicvaluechanged", handleData);
+
+    document.getElementById('statusText').textContent = "✅ Connesso a ThinkAir!";
   } catch (error) {
-    document.getElementById("status").textContent = "❌ Connessione fallita";
+    document.getElementById('statusText').textContent = "❌ Connessione fallita";
     console.error(error);
   }
 }
-
-function startReading() {
-  characteristic.startNotifications().then(() => {
-    characteristic.addEventListener('characteristicvaluechanged', handleData);
-  });
-}
-
-let gaugeChart, barChart;
-window.onload = function () {
-  const gaugeCtx = document.getElementById("gauge").getContext("2d");
-  const barCtx = document.getElementById("barChart").getContext("2d");
-
-  gaugeChart = new Chart(gaugeCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ["Temperatura", "Resto"],
-      datasets: [{ data: [0, 100], backgroundColor: ["#007BFF", "#eaeaea"] }]
-    },
-    options: {
-      cutout: '80%%',
-      plugins: {
-        tooltip: { enabled: false },
-        legend: { display: false }
-      }
-    }
-  });
-
-  barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: ["Temp", "Umidità", "Pressione", "TVOC"],
-      datasets: [{
-        label: "Valori ambientali",
-        data: [0, 0, 0, 0],
-        backgroundColor: "#007BFF"
-      }]
-    },
-    options: {
-      scales: { y: { beginAtZero: true } }
-    }
-  });
-};
 
 function handleData(event) {
   const value = new TextDecoder().decode(event.target.value);
   try {
     const json = JSON.parse(value);
-    const temp = parseFloat(json.T);
-    const hum = parseFloat(json.H);
-    const pres = parseFloat(json.P);
-    const tvoc = parseFloat(json.G) / 1000;
+    const temperature = parseFloat(json.T);
+    updateGauge(temperature);
+  } catch (err) {
+    console.error("Errore parsing JSON:", err);
+  }
+}
 
-    gaugeChart.data.datasets[0].data = [temp, 100 - temp];
-    gaugeChart.update();
-
-    barChart.data.datasets[0].data = [temp, hum, pres, tvoc];
-    barChart.update();
-  } catch (e) {
-    console.error("Errore nella lettura BLE:", e);
+let tempChart;
+function updateGauge(value) {
+  if (!tempChart) {
+    const ctx = document.getElementById('tempGauge').getContext('2d');
+    tempChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Temperatura'],
+        datasets: [{
+          label: 'Temperatura (°C)',
+          data: [value, 50 - value],
+          backgroundColor: ['#36A2EB', '#DDDDDD'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        cutout: '80%',
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false }
+        }
+      }
+    });
+  } else {
+    tempChart.data.datasets[0].data[0] = value;
+    tempChart.data.datasets[0].data[1] = 50 - value;
+    tempChart.update();
   }
 }

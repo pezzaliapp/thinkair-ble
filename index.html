@@ -2,25 +2,44 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ThinkAir BLE</title>
-  <link rel="manifest" href="manifest.json" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="manifest" href="manifest.json">
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 1em; }
-    .chart-container { width: 90%%; margin: auto; max-width: 600px; }
-    canvas { margin: 20px 0; }
-    button { padding: 10px 20px; font-size: 16px; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fff;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 1.8rem;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px auto;
+      display: block;
+    }
+    .status {
+      margin: 12px;
+      font-size: 1.2rem;
+      color: red;
+    }
+    #gaugeContainer {
+      width: 250px;
+      height: 250px;
+      margin: 30px auto;
+    }
   </style>
 </head>
 <body>
   <h1>🌍 ThinkAir BLE</h1>
-  <button onclick="connect()">🔗 Connetti alla Nicla</button>
-  <p id="status">In attesa di connessione...</p>
-
-  <div class="chart-container"><canvas id="gauge"></canvas></div>
-  <div class="chart-container"><canvas id="barChart"></canvas></div>
-
+  <button onclick="connectToDevice()">🔗 Connetti alla Nicla</button>
+  <div class="status" id="statusText">In attesa di connessione...</div>
+  <div id="gaugeContainer"><canvas id="tempGauge"></canvas></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
