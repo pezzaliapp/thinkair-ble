@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ThinkAir BLE</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 1em; }
+    .chart-container { width: 90%%; margin: auto; max-width: 600px; }
+    canvas { margin: 20px 0; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
 </head>
 <body>
   <h1>🌍 ThinkAir BLE</h1>
-  <button id="connect">🔗 Connetti alla Nicla</button>
-  <pre id="output">In attesa di connessione...</pre>
+  <button onclick="connect()">🔗 Connetti alla Nicla</button>
+  <p id="status">In attesa di connessione...</p>
+
+  <div class="chart-container"><canvas id="gauge"></canvas></div>
+  <div class="chart-container"><canvas id="barChart"></canvas></div>
+
   <script src="app.js"></script>
 </body>
 </html>
