@@ -2,44 +2,21 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ThinkAir BLE</title>
-  <link rel="manifest" href="manifest.json">
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background: #fff;
-    }
-    h1 {
-      margin-top: 20px;
-      font-size: 1.8rem;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin: 10px auto;
-      display: block;
-    }
-    .status {
-      margin: 12px;
-      font-size: 1.2rem;
-      color: red;
-    }
-    #gaugeContainer {
-      width: 250px;
-      height: 250px;
-      margin: 30px auto;
-    }
-  </style>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>🌍 ThinkAir BLE</h1>
-  <button onclick="connectToDevice()">🔗 Connetti alla Nicla</button>
-  <div class="status" id="statusText">In attesa di connessione...</div>
-  <div id="gaugeContainer"><canvas id="tempGauge"></canvas></div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <button onclick="connect()">🔗 Connetti alla Nicla</button>
+  <p id="status">⏳ In attesa di connessione...</p>
+  <div class="gauges">
+    <div class="gauge" id="gauge-temp">🌡️ Temp</div>
+    <div class="gauge" id="gauge-hum">💧 Hum</div>
+    <div class="gauge" id="gauge-pres">🌬️ Press</div>
+    <div class="gauge" id="gauge-gas">🌫️ TVOC</div>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
