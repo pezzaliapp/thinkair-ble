@@ -1,18 +1,36 @@
 document.getElementById('connect').addEventListener('click', async () => {
   try {
     const device = await navigator.bluetooth.requestDevice({
-      filters: [{ namePrefix: 'Nicla' }],
-      optionalServices: ['battery_service']
+      filters: [{ name: 'ThinkAir' }],
+      optionalServices: ['19b10010-e8f2-537e-4f6c-d104768a1214']
     });
+
     const server = await device.gatt.connect();
-    const service = await server.getPrimaryService('battery_service');
-    const characteristic = await service.getCharacteristic('battery_level');
+    const service = await server.getPrimaryService('19b10010-e8f2-537e-4f6c-d104768a1214');
+    const characteristic = await service.getCharacteristic('19b10011-e8f2-537e-4f6c-d104768a1214');
+
     characteristic.startNotifications();
     characteristic.addEventListener('characteristicvaluechanged', event => {
-      const value = event.target.value.getUint8(0);
-      document.getElementById('output').textContent = `Valore ricevuto: ${value}`;
+      const jsonString = new TextDecoder().decode(event.target.value);
+      let dati;
+
+      try {
+        dati = JSON.parse(jsonString);
+      } catch (e) {
+        document.getElementById('output').textContent = "⚠️ Dato ricevuto non valido: " + jsonString;
+        return;
+      }
+
+      document.getElementById('output').innerHTML =
+        `🌡️ Temperatura: ${dati.T} °C<br>` +
+        `💧 Umidità: ${dati.H} %<br>` +
+        `🌬️ Pressione: ${dati.P} hPa<br>` +
+        `🌫️ Gas (TVOC/CO₂eq): ${dati.G} Ω`;
     });
+
+    document.getElementById('output').textContent = "🔗 Connesso! In attesa dei dati...";
   } catch (err) {
-    document.getElementById('output').textContent = `Errore: ${err}`;
+    console.error(err);
+    document.getElementById('output').textContent = `❌ Errore: ${err}`;
   }
 });
