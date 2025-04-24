@@ -1,0 +1,9 @@
+{
+  "name": "ThinkAir BLE",
+  "short_name": "ThinkAir",
+  "start_url": ".",
+  "display": "standalone",
+  "icons": [],
+  "background_color": "#ffffff",
+  "description": "Monitoraggio BLE da Nicla Sense ME"
+}
