@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThinkAir BLE</title>
+  <title>ThinkAir Cloud</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body>
-  <h1>🌍 ThinkAir BLE</h1>
-  <button onclick="connect()">🔗 Connetti alla Nicla</button>
-  <p id="status">⏳ In attesa di connessione...</p>
+  <h1>🌍 ThinkAir Cloud</h1>
+  <p id="status">⏳ Lettura dati da Firebase...</p>
   <div class="gauges">
     <div class="gauge" id="gauge-temp">🌡️ Temp</div>
     <div class="gauge" id="gauge-hum">💧 Hum</div>
